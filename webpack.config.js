@@ -12,7 +12,8 @@ module.exports = {
         "react": "React",
         "marked": "marked",
         "jquery": "jQuery",
-        "react-dom": "ReactDOM"
+        "react-dom": "ReactDOM",
+        "window": "window"
     },
     plugins: isDev ?
         [] :

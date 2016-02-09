@@ -2,7 +2,7 @@
 
 This repository shows how React can be used with the Express framework isomorphically; that is to use the same code on both the server and browser. This uses the comment box example from the [React tutorial](http://facebook.github.io/react/docs/tutorial.html) but in addition to rendering the comment box in the browser, it pre-renders it on the server, using the same code.
 
-There are also a few other additions. I've set up `webpack` so that it bundles up the code to be used in the browser. I also didn't particularly like the `JSX` template render methods being in the same file as the controller code (despite what React says, they are controllers; they behave exactly the same way as Angular's controllers). And lastly since I had to server-side rendering, I've had to use a view engine. I've chose `Swig` as unlike `Jade` it uses proper HTML and so means I have one fewer language to learn (which fits into the philosophy of isomorphism).
+There are also a few other additions. I've set up `webpack` so that it bundles up the code to be used in the browser. I also didn't particularly like the `JSX` template render methods being in the same file as the controller / component code (despite what React says, they are not just "views"; they behave very similar to Angular's controllers). And lastly since I had to server-side rendering, I've had to use a view engine. I've chose `Swig` as unlike `Jade` it uses proper HTML and so means I have one fewer language to learn (which fits into the philosophy of isomorphism).
 
 Naturally this means all of the other server language implementations have been removed - Python, PHP etc.
 
