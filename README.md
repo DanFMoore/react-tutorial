@@ -8,11 +8,11 @@ Naturally this means all of the other server language implementations have been 
 
 ## Implementation
 
-The example file from the tutorial is now in a publicly-inaccessible location at `src/example.js`. The templates are in another file which is `require`d from there, `templates.jsx`.
+The example file from the tutorial is now in a publicly-inaccessible location at `components/components.js`. This exports each component in `module.exports`. The templates are in another file which is `require`d from there, `templates.jsx`.
 
-In the browser, the main entry point method which calls `ReactDOM.render`, is exported as `render` from `example.js`. This is made accessible as a window method in `src/index.js`, which is used as the entry script for `webpack`. This is all compiled into `public/scripts/bundle.js` which is what the browser includes. The settings for the `webpack` are found in `webpack.config.js`; several libraries like React itself and the markdown parser are set to be externals, which means they are not bundled up so that the browser can load those from a CDN (Content Delivery Network).
+In the browser, the main entry point method which calls `ReactDOM.render`, is added as a global window method, `renderCommentBox` in `components/browser.js`, which is used as the entry script for `webpack`. This is all compiled into `public/scripts/bundle.js` which is what the browser includes. The settings for the `webpack` are found in `webpack.config.js`; several libraries like React itself and the markdown parser are set to be externals, which means they are not bundled up so that the browser can load those from a CDN (Content Delivery Network).
 
-On the browser, `example.js` itself is `require`d, after the `node-jsx` module is set up, in order that the JSX syntax can be understood. `example.js` also exports a `renderServer` which returns a static string after calling `ReactDOMServer.renderToString` from the `react-dom/server` module. The route for `/` simply calls this method and passes it as a variable to the `views/index.html` view.
+On the browser, `components/server.js` is `require`d, after the `node-jsx` module is set up, in order that the JSX syntax can be understood. This exports a `renderCommentBox` method which returns a static string after calling `ReactDOMServer.renderToString` from the `react-dom/server` module. The route for `/` simply calls this method and passes it as a variable to the `views/index.html` view.
 
 ## To use
 

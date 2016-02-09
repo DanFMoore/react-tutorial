@@ -17,7 +17,7 @@ var bodyParser = require('body-parser');
 var swig = require('swig');
 
 require('node-jsx').install();
-var example = require('./src/example');
+var components = require('./components/server');
 
 var app = express();
 
@@ -43,7 +43,9 @@ app.get('/', function(req, res) {
     }
 
     res.render('index', {
-      commentBox: example.renderServer(JSON.parse(data))
+      commentBox: components.renderCommentBox({
+        comments: JSON.parse(data)
+      })
     });
   });
 });

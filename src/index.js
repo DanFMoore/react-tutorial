@@ -1,1 +1,0 @@
-window.commentBoxRender = require('./example.js').render;

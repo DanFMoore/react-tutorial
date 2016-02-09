@@ -1,11 +1,8 @@
 var webpack = require("webpack");
 var isDev = process.argv.indexOf('--dev') > -1;
 
-// Don't include react-dom/server in the browser
-var ignore = new webpack.IgnorePlugin(/react-dom/);
-
 module.exports = {
-    entry: "./src/index.js",
+    entry: "./components/browser.js",
     output: {
         path: "./public/scripts",
         filename: "bundle.js"
@@ -13,11 +10,13 @@ module.exports = {
     // These libraries are included in separate script tags and are available as global variables
     externals: {
         "react": "React",
-        "marked": "marked"
+        "marked": "marked",
+        "jquery": "jQuery",
+        "react-dom": "ReactDOM"
     },
     plugins: isDev ?
-        [ignore] :
-        [ignore, new webpack.optimize.UglifyJsPlugin({minimize: true})],
+        [] :
+        [new webpack.optimize.UglifyJsPlugin({minimize: true})],
     devtool: isDev ? 'source-map' : null,
     module: {
         loaders: [
