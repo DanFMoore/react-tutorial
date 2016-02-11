@@ -14,6 +14,10 @@ var templates = require('./templates.jsx');
 var React = require('react');
 var marked = require('marked');
 var $ = require('jquery');
+var classNames = require('classnames');
+
+var validation = require('react-validation-mixin');
+var Validator = require('validatorjs');
 
 var Comment = React.createClass({
     displayName: 'Comment',
@@ -82,26 +86,93 @@ var CommentList = React.createClass({
 var CommentForm = React.createClass({
     displayName: 'CommentForm',
     getInitialState: function () {
+        // Define the rules and custom messages for each field.
+        // Do this by creating a validator with no data; it's added later.
+        this.validatorTypes = new Validator(
+            {},
+            {
+
+            },
+            {
+                'min.text': 'Enter a message between 10 and 50 characters',
+                'max.text': 'Enter a message between 10 and 50 characters'
+            }
+        );
+
         return {author: '', text: ''};
     },
+    addValidation: function(e) {
+        this.validatorTypes.rules = this.validatorTypes._parseRules({
+            author: 'required',
+            text: 'required|min:10|max:50'
+        });
+
+        this.props.handleValidation('author')(e);
+        this.props.handleValidation('text')(e);
+    },
     handleAuthorChange: function (e) {
-        this.setState({author: e.target.value});
+        this.setState({author: e.target.value}, () => {
+            this.props.handleValidation('author')(e);
+        });
     },
     handleTextChange: function (e) {
-        this.setState({text: e.target.value});
+        this.setState({text: e.target.value}, () => {
+            this.props.handleValidation('text')(e);
+        });
     },
     handleSubmit: function (e) {
         e.preventDefault();
-        var author = this.state.author.trim();
-        var text = this.state.text.trim();
-        if (!text || !author) {
-            return;
-        }
-        this.props.onCommentSubmit({author: author, text: text});
-        this.setState({author: '', text: ''});
+
+        // If the form is valid, then submit the comment
+        this.props.validate((error) => {
+            if (!error) {
+                this.props.onCommentSubmit(this.state);
+                this.setState({author: '', text: ''});
+            }
+        });
+    },
+    getValidatorData: function () {
+        return this.state;
+    },
+    getClasses: function (field) {
+        return classNames({
+            'has-error': !this.props.isValid(field)
+        });
     },
     render: templates.commentForm
 });
+
+var strategy = {
+    /**
+     * Validate using the validatorjs library
+     *
+     * @see https://www.npmjs.com/package/validatorjs
+     *
+     * @param {Object} data the data submitted
+     * @param {Validator} validator the validatorjs validator
+     * @param {Object} options contains name of element being validated and previous errors
+     * @param {Function} callback called and passed the errors
+     */
+    validate: function(data, validator, options, callback) {
+        // Set the data again on the validator and clear existing errors
+        validator.input = data;
+        validator.errors.errors = {};
+
+        var getErrors = () => {
+            if (options.key) {
+                options.prevErrors[options.key] = validator.errors.get(options.key);
+                callback(options.prevErrors);
+            } else {
+                callback(validator.errors.all());
+            }
+        };
+
+        // Run the validator asynchronously in case any async rules have been added
+        validator.checkAsync(getErrors, getErrors);
+    }
+};
+
+CommentForm = validation(strategy)(CommentForm);
 
 module.exports = {
     Comment,

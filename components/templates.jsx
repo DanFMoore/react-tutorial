@@ -36,20 +36,43 @@ module.exports = {
         );
     },
     commentForm: function () {
+        function renderErrors(messages) {
+            if (messages.length) {
+                messages = messages.map((message) => <li>{message}</li>);
+
+                return <ul class="errors">{messages}</ul>;
+            }
+        }
+
         return (
             <form className="commentForm" onSubmit={this.handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Your name"
-                    value={this.state.author}
-                    onChange={this.handleAuthorChange}
+                <p>
+                    <input
+                        type="text"
+                        placeholder="Your name"
+                        className={this.getClasses('author')}
+                        value={this.state.author}
+                        onChange={this.handleAuthorChange}
+                        onBlur={this.addValidation}
                     />
-                <input
-                    type="text"
-                    placeholder="Say something..."
-                    value={this.state.text}
-                    onChange={this.handleTextChange}
+                </p>
+
+                {renderErrors(this.props.getValidationMessages('author'))}
+
+                <p>
+                    <input
+                        type="text"
+                        placeholder="Say something..."
+                        className={this.getClasses('text')}
+                        value={this.state.text}
+                        onChange={this.handleTextChange}
+                        onBlur={this.addValidation}
+
                     />
+                </p>
+
+                {renderErrors(this.props.getValidationMessages('text'))}
+
                 <input type="submit" value="Post" />
             </form>
         );
