@@ -9,7 +9,7 @@ module.exports = {
      * @param {Object} params
      * @returns {String}
      */
-    renderCommentBox: (params) => {
+    renderCommentBox(params) {
         return ReactDOMServer.renderToString(React.createElement(components.CommentBox, params));
     }
 };

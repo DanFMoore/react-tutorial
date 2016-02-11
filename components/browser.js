@@ -1,12 +1,14 @@
 var components = require('./components');
 var ReactDOM = require('react-dom');
+var window = require('window');
+var $ = require('jquery');
 
 /**
  * Load the comments via AJAX before rendering the comment box with the DOM.
  * This will avoid the server rendered comments being replaced with nothing by JS.
  * If the AJAX call fails, then just render no comments after logging the error.
  */
-window.renderCommentBox = () => {
+window.renderCommentBox = function renderCommentBox() {
     var url = "/api/comments";
 
     $.get(url).then(
