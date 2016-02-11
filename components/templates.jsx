@@ -50,9 +50,10 @@ module.exports = {
                     <input
                         type="text"
                         placeholder="Your name"
+                        name="author"
                         className={this.getClasses('author')}
                         value={this.state.author}
-                        onChange={this.handleAuthorChange}
+                        onChange={this.handleChange}
                         onBlur={this.addValidation}
                     />
                 </p>
@@ -63,9 +64,10 @@ module.exports = {
                     <input
                         type="text"
                         placeholder="Say something..."
+                        name="text"
                         className={this.getClasses('text')}
                         value={this.state.text}
-                        onChange={this.handleTextChange}
+                        onChange={this.handleChange}
                         onBlur={this.addValidation}
 
                     />
