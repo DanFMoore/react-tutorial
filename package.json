@@ -11,6 +11,7 @@
     "jquery": "^2.2.0",
     "marked": "^0.3.5",
     "node-jsx": "^0.13.3",
+    "nodemon": "^1.8.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-validation-mixin": "^5.3.4",
@@ -28,7 +29,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "webpack-dev": "webpack --watch --dev",
+    "watch": "nodemon -e js,html server.js",
+    "webpack:dev": "webpack --watch --dev",
     "webpack": "webpack"
   },
   "repository": {

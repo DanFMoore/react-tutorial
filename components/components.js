@@ -10,16 +10,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-'use strict';
 
-var templates = require('./templates.jsx');
 var React = require('react');
 var marked = require('marked');
-var $ = require('jquery');
 var classNames = require('classnames');
-
 var validation = require('react-validation-mixin');
-var Validator = require('validatorjs');
+var $ = require('jquery');
+
+var templates = require('./templates.jsx');
+var strategy = require('./strategy');
+var schemas = require('./schemas');
 
 var Comment = React.createClass({
     displayName: 'Comment',
@@ -89,23 +89,24 @@ var CommentForm = React.createClass({
     displayName: 'CommentForm',
     getInitialState: function () {
         // Define the rules and custom messages for each field.
-        this.validatorTypes = strategy.createInactiveSchema(
-            {
-                author: 'required',
-                text: 'required|min:10|max:50'
-            },
-            {
-                //'min.text': 'Enter a message between 10 and 50 characters',
-                //'max.text': 'Enter a message between 10 and 50 characters'
-            }
-        );
+        this.validatorTypes = schemas.commentForm;
 
         return {author: '', text: ''};
     },
-    addValidation: function(e) {
+    /**
+     * Activate the validation rule for the element on blur
+     *
+     * @param {Event} e
+     */
+    activateValidation: function(e) {
         strategy.activateRule(this.validatorTypes, e.target.name);
         this.props.handleValidation(e.target.name)(e);
     },
+    /**
+     * Set the state of the changed variable and then when set, call validator
+     *
+     * @param {Event} e
+     */
     handleChange: function (e) {
         var state = {};
         state[e.target.name] = e.target.value;
@@ -114,12 +115,17 @@ var CommentForm = React.createClass({
             this.props.handleValidation(e.target.name)(e);
         });
     },
+    /**
+     * Validate the form and if valid, submit the comment
+     *
+     * @param {Event} e
+     */
     handleSubmit: function (e) {
         e.preventDefault();
 
-        // If the form is valid, then submit the comment
         this.props.validate((error) => {
             if (!error) {
+                // this.props.onCommentSubmit is actually CommentBox.handleCommentSubmit
                 this.props.onCommentSubmit(this.state);
                 this.setState({author: '', text: ''});
             }
@@ -135,70 +141,6 @@ var CommentForm = React.createClass({
     },
     render: templates.commentForm
 });
-
-var strategy = {
-    createSchema: function (rules, messages, createValidatorCallback) {
-        return {
-            rules,
-            messages,
-            createValidatorCallback
-        };
-    },
-    createInactiveSchema: function (rules, messages, createValidatorCallback) {
-        var schema = this.createSchema(rules, messages, createValidatorCallback);
-        schema.activeRules = [];
-
-        return schema;
-    },
-    activateRule: function(schema, rule) {
-        if (schema.activeRules.indexOf(rule) === -1) {
-            schema.activeRules.push(rule);
-        }
-    },
-    /**
-     * Validate using the validatorjs library
-     *
-     * @see https://www.npmjs.com/package/validatorjs
-     *
-     * @param {Object} data the data submitted
-     * @param {Object} schema contains rules and custom error messages
-     * @param {Object} options contains name of element being validated and previous errors
-     * @param {Function} callback called and passed the errors
-     */
-    validate: function (data, schema, options, callback) {
-        var rules = {};
-
-        // Only add active rules to the validator if an initially inactive schema has been created.
-        // Check all rules regardless if the form has been submitted (options.key is empty).
-        if (typeof schema.activeRules !== 'undefined' && options.key) {
-            for (let i in schema.activeRules) {
-                let ruleName = schema.activeRules[i];
-
-                rules[ruleName] = schema.rules[ruleName];
-            }
-        } else {
-            rules = schema.rules;
-        }
-
-        var validator = new Validator(data, rules, schema.messages);
-
-        if (typeof schema.createValidatorCallback === 'function') {
-            schema.createValidatorCallback(validator);
-        }
-
-        var getErrors = () => {
-            if (options.key) {
-                options.prevErrors[options.key] = validator.errors.get(options.key);
-                callback(options.prevErrors);
-            } else {
-                callback(validator.errors.all());
-            }
-        };
-
-        // Run the validator asynchronously in case any async rules have been added
-        validator.checkAsync(getErrors, getErrors);
-    }
-};
 
 CommentForm = validation(strategy)(CommentForm);
 

@@ -54,7 +54,7 @@ module.exports = {
                         className={this.getClasses('author')}
                         value={this.state.author}
                         onChange={this.handleChange}
-                        onBlur={this.addValidation}
+                        onBlur={this.activateValidation}
                     />
                 </p>
 
@@ -68,7 +68,7 @@ module.exports = {
                         className={this.getClasses('text')}
                         value={this.state.text}
                         onChange={this.handleChange}
-                        onBlur={this.addValidation}
+                        onBlur={this.activateValidation}
 
                     />
                 </p>
