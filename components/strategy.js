@@ -2,7 +2,7 @@
  * Validate using the validatorjs library as a strategy for react-validation-mixin
  *
  * @see https://www.npmjs.com/package/validatorjs
- * @see https://www.npmjs.com/package/react-validator-mixin
+ * @see https://jurassix.gitbooks.io/docs-react-validation-mixin/content/overview/strategies.html
  */
 
 'use strict';
@@ -130,9 +130,19 @@ module.exports = {
                     resolve();
                 },
                 () => {
-                    reject(validator.errors.all());
+                    var e = new this.Error('A validation error occurred');
+                    e.errors = validator.errors.all();
+
+                    reject(e);
                 }
             );
         });
-    }
+    },
+    /**
+     * Extension of the built-in Error. Created by validateServer when validation fails.
+     * Exists so that middleware can check it with instanceof: if (err instanceof strategy.Error)
+     *
+     * @property {Object} errors Contains the error messages by field name.
+     */
+    Error: class extends Error {}
 };

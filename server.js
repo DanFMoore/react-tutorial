@@ -37,7 +37,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-
 app.get('/', function(req, res) {
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
@@ -74,7 +73,8 @@ app.get('/api/comments', function(req, res) {
   });
 });
 
-app.post('/api/comments', function(req, res) {
+app.post('/api/comments', function(req, res, next) {
+  // Validate the request and if it fails, call the error handler
   strategy.validateServer(req.body, schemas.commentForm).then(() => {
     fs.readFile(COMMENTS_FILE, function(err, data) {
       if (err) {
@@ -100,12 +100,20 @@ app.post('/api/comments', function(req, res) {
       });
     });
   })
-  .catch((errors) => {
-    // Handle validation errors
-    res.status(400).json(errors);
-  });
+  .catch(next);
 });
 
+/**
+ * If a validation error, output a 400 JSON response containing the error messages.
+ * Otherwise, use the default error handler.
+ */
+app.use(function(err, req, res, next) {
+  if (err instanceof strategy.Error) {
+    res.status(400).json(err.errors);
+  } else {
+    next(err, req, res);
+  }
+});
 
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');

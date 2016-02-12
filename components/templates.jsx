@@ -1,7 +1,7 @@
 var React = require('react');
 
 module.exports = {
-    comment: function () {
+    comment() {
         return (
             <div className="comment">
                 <h2 className="commentAuthor">
@@ -11,7 +11,7 @@ module.exports = {
             </div>
         );
     },
-    commentBox: function (CommentList, CommentForm) {
+    commentBox(CommentList, CommentForm) {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
@@ -20,7 +20,7 @@ module.exports = {
             </div>
         );
     },
-    commentList: function (Comment) {
+    commentList(Comment) {
         var commentNodes = this.props.data.map(function(comment) {
             return (
                 <Comment author={comment.author} key={comment.id}>
@@ -35,7 +35,7 @@ module.exports = {
             </div>
         );
     },
-    commentForm: function () {
+    commentForm() {
         function renderErrors(messages) {
             if (messages.length) {
                 messages = messages.map((message) => <li>{message}</li>);
@@ -51,7 +51,7 @@ module.exports = {
                         type="text"
                         placeholder="Your name"
                         name="author"
-                        className={this.getClasses('author')}
+                        className={this.getClassName('author')}
                         value={this.state.author}
                         onChange={this.handleChange}
                         onBlur={this.activateValidation}
@@ -65,7 +65,7 @@ module.exports = {
                         type="text"
                         placeholder="Say something..."
                         name="text"
-                        className={this.getClasses('text')}
+                        className={this.getClassName('text')}
                         value={this.state.text}
                         onChange={this.handleChange}
                         onBlur={this.activateValidation}

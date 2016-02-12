@@ -8,7 +8,7 @@ var $ = require('jquery');
  * This will avoid the server rendered comments being replaced with nothing by JS.
  * If the AJAX call fails, then just render no comments after logging the error.
  */
-window.renderCommentBox = function renderCommentBox() {
+window.renderCommentBox = function () {
     var url = "/api/comments";
 
     $.get(url).then(
