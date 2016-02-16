@@ -1,4 +1,4 @@
-var strategy = require('./strategy');
+var strategy = require('react-validatorjs-strategy');
 
 module.exports = {
     commentForm: strategy.createInactiveSchema(

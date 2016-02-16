@@ -14,6 +14,7 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-validation-mixin": "^5.3.4",
+    "react-validatorjs-strategy": "^0.1.4",
     "swig": "^1.4.2",
     "validatorjs": "^2.0.2"
   },

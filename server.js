@@ -15,12 +15,11 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var swig = require('swig');
+var strategy = require('react-validatorjs-strategy');
+var schemas = require('./components/schemas');
 
 require('node-jsx').install();
 var components = require('./components/server');
-
-var strategy = require('./components/strategy');
-var schemas = require('./components/schemas');
 
 var app = express();
 

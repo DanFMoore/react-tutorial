@@ -18,7 +18,7 @@ On the browser, `components/server.js` is `require`d, after the `node-jsx` modul
 
 ## Validation
 
-There is also client-side and server-side validation which again is isomorphic. This uses `react-validation-mixin` for React from which the rules are defined by `validatorjs`. These are connected using a "strategy" defined in `components/strategy.js` where more information can be found. The schemas are defined in `components/schemas.js`.
+There is also client-side and server-side validation which again is isomorphic. This uses `react-validation-mixin` for React from which the rules are defined by `validatorjs`. These are connected using a [react-validatorjs-strategy](https://github.com/TheChech/react-validatorjs-strategy). The schemas are defined in `components/schemas.js`.
 
 Extra functionality has been added to `components/templates.jsx` and `components/components.js` to handle the validation and server-side to the `/api/comments` POST end point in `server.js`.
 

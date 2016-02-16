@@ -15,9 +15,9 @@ var React = require('react');
 var marked = require('marked');
 var validation = require('react-validation-mixin');
 var $ = require('jquery');
+var strategy = require('react-validatorjs-strategy');
 
 var templates = require('./templates.jsx');
-var strategy = require('./strategy');
 var schemas = require('./schemas');
 
 var Comment = React.createClass({
